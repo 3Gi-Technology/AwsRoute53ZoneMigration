@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/contentModel.xml
+/.idea.Route53Migration.iml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../:\_Repos\3Gi\Route53Migration\.idea\.idea.Route53Migration.dir\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
