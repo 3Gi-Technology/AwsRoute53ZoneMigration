@@ -24,6 +24,16 @@ namespace Route53Migration
 
         [JsonProperty("ResourceRecords", NullValueHandling = NullValueHandling.Ignore)]
         public ResourceRecord[] ResourceRecords { get; set; }
+        
+        [JsonProperty("AliasTarget", NullValueHandling = NullValueHandling.Ignore)]
+        public AliasTarget AliasTarget { get; set; }
+    }
+
+    public class AliasTarget
+    {
+        public string HostedZoneId { get; set; }
+        public string DNSName { get; set; }
+        public bool EvaluateTargetHealth { get; set; }
     }
 
     public partial class ResourceRecord

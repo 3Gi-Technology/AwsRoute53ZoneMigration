@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Route53Migration.Migration;
 
@@ -13,7 +14,7 @@ namespace Route53Migration.Console
 
             foreach (var resourceRecordSet in route53RecordSet.ResourceRecordSets)
             {
-                migChanges.Add(new MigChange()
+                var migChange = new MigChange()
                 {
                     Action = "CREATE",
                     ResourceRecordSet = new MigResourceRecordSet()
@@ -21,9 +22,28 @@ namespace Route53Migration.Console
                         Name = resourceRecordSet.Name,
                         Ttl = resourceRecordSet.Ttl,
                         Type = resourceRecordSet.Type,
-                        ResourceRecords = resourceRecordSet.ResourceRecords.Select(record => new MigResourceRecord() {Value = record.Value}).ToArray()
                     }
-                });
+                };
+                
+                if (resourceRecordSet.ResourceRecords != null && resourceRecordSet.ResourceRecords.Any())
+                {
+                    migChange.ResourceRecordSet.ResourceRecords = resourceRecordSet.ResourceRecords.Select(record => new MigResourceRecord() { Value = record.Value }).ToArray();
+
+                }else if (resourceRecordSet.AliasTarget != null)
+                {
+                    migChange.ResourceRecordSet.AliasTarget = new MigAliasTarget()
+                    {
+                        DnsName = resourceRecordSet.AliasTarget.DNSName,
+                        EvaluateTargetHealth = resourceRecordSet.AliasTarget.EvaluateTargetHealth,
+                        HostedZoneId = resourceRecordSet.AliasTarget.HostedZoneId
+                    };
+                }else
+                {
+                    throw new Exception("Unknown record State.");
+                }
+
+
+                migChanges.Add(migChange);
             }
 
 
